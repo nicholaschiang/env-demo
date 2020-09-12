@@ -1,6 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Environment Variables Demo
+
+This is a repro demonstrating that Next.js replaced the `process.env.NODE_ENV`
+with `production` no matter what is set during build (even if it's set to `test`
+which is documented as [a supported env](https://nextjs.org/docs/basic-features/environment-variables#test-environment-variables)).
+
+To reproduce the issue, do the following:
+1. Install dependencies:
+
+```
+$ yarn install
+```
+
+2. Build the app using the `test` environment:
+
+```
+$ yarn test:build
+```
+
+3. Start the app using the `test` environment:
+
+```
+$ yarn test:start
+```
+
+4. Visit the API route at http://localhost:3000/api/env and notice that the JSON
+   response contains `production` instead of `test`. This is because Next.js
+   hardcodes (i.e. replaces) the `process.env.NODE_ENV` variable to `production`
+   when running `next build`. This is not ideal when you want to use the
+   `NODE_ENV` variable to trigger certain behavior during tests (e.g. accessing
+   different Algolia search indexes).
 
 ## Getting Started
+
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 First, run the development server:
 
